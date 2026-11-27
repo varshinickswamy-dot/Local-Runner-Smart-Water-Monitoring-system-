@@ -3,7 +3,7 @@
   JalRakshak AI - ESP32 monitoring device
   =====================================================
 
-  - Reads water sensors (flow, pressure, pH, turbidity, TDS)
+  - Reads the four connected water sensors (flow, pH, turbidity, TDS)
   - Shows live readings on a 16x2 I2C LCD (rotating pages)
   - Sends one JSON reading every 5 s over USB (Serial, 115200)
     -> backend/esp32_bridge.py forwards it to the website
@@ -45,7 +45,6 @@ const int LCD_SCL = 22;
 // Sensor pins. Set a pin to -1 if that sensor is NOT connected.
 // Analog sensors must use ADC1 pins (32-39) so WiFi still works.
 const int PIN_FLOW      = 27;  // YF-S201 style pulse flow sensor
-const int PIN_PRESSURE  = 34;  // analog pressure transducer
 const int PIN_PH        = 35;  // analog pH module
 const int PIN_TURBIDITY = 32;  // analog turbidity module
 const int PIN_TDS       = 33;  // analog TDS module
@@ -57,11 +56,6 @@ const float FLOW_PULSES_PER_LPM = 7.5;
 const float PH_NEUTRAL_VOLTAGE = 2.50;
 const float PH_SLOPE = 3.5;
 
-// Pressure transducer: voltage at 0 bar and at full scale
-// (at the ESP32 pin, i.e. after any voltage divider)
-const float PRESSURE_V_MIN = 0.33;
-const float PRESSURE_V_MAX = 3.0;
-const float PRESSURE_MAX_BAR = 12.0;
 
 // Timing
 const unsigned long SEND_INTERVAL_MS = 5000;
@@ -77,7 +71,7 @@ bool lcdFound = false;
 
 volatile unsigned long flowPulses = 0;
 
-float flowRate = 0, pressureBar = 0, phValue = 7, turbidityNtu = 0, tdsPpm = 0;
+float flowRate = 0, phValue = 7, turbidityNtu = 0, tdsPpm = 0;
 float totalLitres = 0;
 
 String verdict = "WAITING";   // from the website via the bridge
@@ -187,12 +181,6 @@ void readSensors() {
   }
   lastFlowMs = now;
 
-  if (PIN_PRESSURE >= 0) {
-    float v = readVolts(PIN_PRESSURE);
-    pressureBar = (v - PRESSURE_V_MIN) / (PRESSURE_V_MAX - PRESSURE_V_MIN) * PRESSURE_MAX_BAR;
-    if (pressureBar < 0) pressureBar = 0;
-  }
-
   if (PIN_PH >= 0) {
     float v = readVolts(PIN_PH);
     phValue = 7.0 + (PH_NEUTRAL_VOLTAGE - v) * PH_SLOPE;
@@ -221,7 +209,6 @@ String readingJson() {
   json += ",\"source\":\"ESP32\"";
   json += ",\"zone_id\":\"" + String(ZONE_ID) + "\"";
   if (PIN_FLOW >= 0)      json += ",\"flow_rate\":" + String(flowRate, 2);
-  if (PIN_PRESSURE >= 0)  json += ",\"pressure_bar\":" + String(pressureBar, 2);
   if (PIN_PH >= 0)        json += ",\"ph\":" + String(phValue, 2);
   if (PIN_TURBIDITY >= 0) json += ",\"turbidity\":" + String(turbidityNtu, 1);
   if (PIN_TDS >= 0)       json += ",\"tds\":" + String(tdsPpm, 0);
@@ -313,15 +300,15 @@ void showPage() {
   switch (page) {
     case 0:
       lcdRow(0, "Flow " + String(flowRate, 1) + " L/min");
-      lcdRow(1, "Pres " + String(pressureBar, 2) + " bar");
+      lcdRow(1, "pH   " + String(phValue, 2));
       break;
     case 1:
-      lcdRow(0, "pH   " + String(phValue, 2));
-      lcdRow(1, "Turb " + String(turbidityNtu, 1) + " NTU");
+      lcdRow(0, "Turb " + String(turbidityNtu, 1) + " NTU");
+      lcdRow(1, "TDS  " + String(tdsPpm, 0) + " ppm");
       break;
     case 2:
-      lcdRow(0, "TDS  " + String(tdsPpm, 0) + " ppm");
-      lcdRow(1, "Used " + String(totalLitres, 1) + " L");
+      lcdRow(0, "Used " + String(totalLitres, 1) + " L");
+      lcdRow(1, "Flow " + String(flowRate, 1) + " L/min");
       break;
     case 3:
       lcdRow(0, "JalRakshak " + String(ZONE_ID).substring(5));
