@@ -56,16 +56,7 @@ FIELD_ALIASES = {
 
 SENSOR_FIELDS = ["flow_rate", "ph", "turbidity", "tds"]
 
-# Used for sensors the ESP32 does not have. These are normal
-# values, so a missing sensor does not cause false alerts
-# (pH 0 or pressure 0 would look like a real problem).
-PLACEHOLDERS = {
-    "flow_rate": 0.0,
-    "pressure_bar": 0.85,
-    "ph": 7.0,
-    "turbidity": 1.0,
-    "tds": 150.0,
-}
+# Missing hardware fields are omitted, never replaced with fake values.
 
 
 def normalize(name):
