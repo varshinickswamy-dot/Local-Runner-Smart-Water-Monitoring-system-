@@ -144,7 +144,7 @@ def analyze_sensor_data(
 
     if (
         flow_rate < 0
-        or pressure_bar < 0
+        or (pressure_bar is not None and pressure_bar < 0)
         or ph < 0
         or ph > 14
         or turbidity < 0
