@@ -1,0 +1,107 @@
+/* =====================================================
+   JALRAKSHAK AI
+   GLOBAL THEME SYSTEM
+===================================================== */
+
+
+/* =====================================================
+   DARK MODE
+===================================================== */
+
+:root,
+[data-theme="dark"] {
+
+  --bg: #0B1020;
+
+  --surface: #151B2E;
+
+  --surface-2: #1B2238;
+
+  --primary: #6C5CE7;
+
+  --accent: #00D4FF;
+
+  --text: #F8FAFC;
+
+  --text-secondary: #94A3B8;
+
+  --border: #29324D;
+
+  --input-bg: #10162A;
+
+  --shadow:
+    0 10px 30px rgba(0, 0, 0, 0.30);
+
+}
+
+
+/* =====================================================
+   LIGHT MODE
+===================================================== */
+
+[data-theme="light"] {
+
+  --bg: #F5F7FB;
+
+  --surface: #FFFFFF;
+
+  --surface-2: #EEF2F7;
+
+  --primary: #5B4BC4;
+
+  --accent: #009CC0;
+
+  --text: #172033;
+
+  --text-secondary: #64748B;
+
+  --border: #D9E0EA;
+
+  --input-bg: #FFFFFF;
+
+  --shadow:
+    0 10px 30px rgba(30, 41, 59, 0.10);
+
+}
+
+
+/* =====================================================
+   GLOBAL BODY
+===================================================== */
+
+html,
+body,
+#root {
+
+  margin: 0;
+
+  min-height: 100%;
+
+}
+
+
+body {
+
+  background: var(--bg);
+
+  color: var(--text);
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+
+}
+
+
+/* =====================================================
+   GLOBAL TRANSITIONS
+===================================================== */
+
+* {
+
+  transition:
+    background-color 0.20s ease,
+    border-color 0.20s ease,
+    color 0.20s ease;
+
+}

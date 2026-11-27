@@ -1,0 +1,1461 @@
+/* =====================================================
+   JalRakshak AI
+   Controls Page
+   Dashboard-Matched UI
+===================================================== */
+
+
+/* =====================================================
+   PAGE CONTAINER
+===================================================== */
+
+.controls-page {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100%;
+  margin: 0 auto;
+  color: var(--text);
+  animation: controlsFadeIn 0.35s ease;
+  box-sizing: border-box;
+}
+
+
+/* =====================================================
+   PAGE ENTRY ANIMATION
+===================================================== */
+
+@keyframes controlsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.controls-header {
+  position: relative;
+
+  min-height: 155px;
+
+  margin-bottom: 25px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+
+/* =====================================================
+   TOP LEFT PAGE ICON
+===================================================== */
+
+.controls-title-icon {
+  position: absolute;
+
+  top: 0;
+  left: -255px;
+
+  width: 100px;
+  height: 100px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 24px;
+
+  background: rgba(108, 92, 231, 0.06);
+
+  border: 1px solid rgba(108, 92, 231, 0.30);
+
+  color: var(--primary);
+
+  box-shadow:
+    0 0 20px rgba(108, 92, 231, 0.08);
+
+  box-sizing: border-box;
+}
+
+.controls-title-icon svg {
+  width: 43px;
+  height: 43px;
+
+  color: var(--primary);
+  stroke: var(--primary);
+
+  stroke-width: 2.2;
+}
+
+
+/* =====================================================
+   TITLE AREA
+===================================================== */
+
+.controls-title-area {
+  flex: 1;
+  min-width: 0;
+
+  padding-top: 0;
+  margin-left: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.controls-brand {
+  display: block;
+
+  margin-bottom: 17px;
+
+  color: var(--primary);
+
+  font-size: 14px;
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: 0.18em;
+}
+
+.controls-header h1 {
+  margin: 0 0 11px;
+
+  color: var(--text);
+
+  font-size: 43px;
+  line-height: 1.05;
+
+  font-weight: 750;
+
+  letter-spacing: -0.03em;
+}
+
+.controls-header p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+
+/* =====================================================
+   REFRESH BUTTON
+===================================================== */
+
+.controls-refresh-btn {
+  position: absolute;
+
+  top: 22px;
+  right: 0;
+
+  min-width: 142px;
+  min-height: 58px;
+
+  padding: 0 21px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  border-radius: 14px;
+
+  background: var(--surface);
+
+  border: 1px solid rgba(108, 92, 231, 0.30);
+
+  color: var(--text);
+
+  font: inherit;
+  font-size: 15px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.controls-refresh-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+
+  color: var(--primary);
+
+  transform: translateY(-1px);
+
+  box-shadow: var(--shadow);
+}
+
+.controls-refresh-btn:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.55;
+}
+
+
+/* =====================================================
+   SIMULATION INFORMATION
+===================================================== */
+
+.controls-simulation-banner {
+  width: 100%;
+  min-height: 66px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 14px 20px;
+
+  margin-bottom: 28px;
+
+  border-radius: 14px;
+
+  background:
+    rgba(0, 212, 255, 0.07);
+
+  border:
+    1px solid rgba(0, 212, 255, 0.25);
+}
+
+.controls-banner-icon {
+  width: 42px;
+  height: 42px;
+
+  flex: 0 0 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  color: var(--accent);
+
+  background:
+    rgba(0, 212, 255, 0.08);
+}
+
+.controls-simulation-banner strong {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: var(--accent);
+
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.controls-simulation-banner span {
+  display: block;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+
+/* =====================================================
+   SUCCESS / ERROR
+===================================================== */
+
+.controls-message {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 14px 17px;
+
+  margin-bottom: 22px;
+
+  border-radius: 12px;
+
+  font-size: 13px;
+}
+
+.controls-message-success {
+  color: #22C55E;
+
+  background:
+    rgba(34, 197, 94, 0.08);
+
+  border:
+    1px solid rgba(34, 197, 94, 0.22);
+}
+
+.controls-message-error {
+  color: #EF4444;
+
+  background:
+    rgba(239, 68, 68, 0.08);
+
+  border:
+    1px solid rgba(239, 68, 68, 0.22);
+}
+
+
+/* =====================================================
+   CONTROL SUMMARY CARDS
+===================================================== */
+
+.controls-status-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 22px;
+
+  margin-bottom: 28px;
+}
+
+.controls-status-card {
+  position: relative;
+
+  min-width: 0;
+  min-height: 245px;
+
+  padding: 24px;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  background: var(--surface);
+
+  border:
+    1px solid var(--border);
+
+  box-shadow: var(--shadow);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.controls-status-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--primary),
+      var(--accent),
+      transparent
+    );
+
+  opacity: 0.75;
+}
+
+.controls-status-card:hover {
+  transform: translateY(-2px);
+
+  border-color:
+    rgba(108, 92, 231, 0.35);
+
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =====================================================
+   CARD TOP
+===================================================== */
+
+.controls-card-top {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+}
+
+
+/* =====================================================
+   CARD ICON
+===================================================== */
+
+.controls-card-icon {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  box-sizing: border-box;
+}
+
+.controls-card-icon svg {
+  width: 25px;
+  height: 25px;
+}
+
+.valve-icon {
+  color: var(--primary);
+
+  background:
+    rgba(108, 92, 231, 0.10);
+}
+
+.motor-icon {
+  color: var(--accent);
+
+  background:
+    rgba(0, 212, 255, 0.09);
+}
+
+.auto-icon {
+  color: #22C55E;
+
+  background:
+    rgba(34, 197, 94, 0.09);
+}
+
+
+/* =====================================================
+   STATUS PILL
+===================================================== */
+
+.controls-status-pill {
+  padding: 7px 11px;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  line-height: 1;
+
+  font-weight: 750;
+
+  letter-spacing: 0.05em;
+}
+
+.status-active {
+  color: #16A34A;
+
+  background:
+    rgba(34, 197, 94, 0.10);
+
+  border:
+    1px solid rgba(34, 197, 94, 0.20);
+}
+
+.status-inactive {
+  color: var(--text-secondary);
+
+  background:
+    var(--surface-2);
+
+  border:
+    1px solid var(--border);
+}
+
+
+/* =====================================================
+   CARD TEXT
+===================================================== */
+
+.controls-status-card h3 {
+  margin: 0 0 8px;
+
+  color: var(--text);
+
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.controls-status-card p {
+  min-height: 40px;
+
+  margin: 0 0 20px;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.controls-action-row {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 10px;
+}
+
+.controls-action-btn {
+  min-height: 43px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 12px;
+
+  border-radius: 10px;
+
+  background:
+    var(--surface-2);
+
+  border:
+    1px solid var(--border);
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.controls-action-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+
+  color: var(--text);
+
+  transform: translateY(-1px);
+}
+
+.controls-action-btn.selected {
+  border-color:
+    rgba(108, 92, 231, 0.40);
+
+  background:
+    rgba(108, 92, 231, 0.10);
+
+  color: var(--primary);
+
+  box-shadow:
+    0 5px 16px rgba(108, 92, 231, 0.08);
+}
+
+.controls-action-btn:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.55;
+}
+
+
+/* =====================================================
+   AUTOMATIC MODE
+===================================================== */
+
+.controls-toggle-btn {
+  width: 100%;
+
+  min-height: 43px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border-radius: 10px;
+
+  background:
+    var(--surface-2);
+
+  border:
+    1px solid var(--border);
+
+  color: var(--text);
+
+  font-size: 12px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.controls-toggle-btn:hover:not(:disabled) {
+  border-color: #22C55E;
+
+  color: #22C55E;
+
+  transform: translateY(-1px);
+}
+
+.controls-toggle-btn.toggle-on {
+  border-color:
+    rgba(34, 197, 94, 0.25);
+
+  color: #22C55E;
+
+  background:
+    rgba(34, 197, 94, 0.08);
+}
+
+.controls-toggle-btn:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.55;
+}
+
+
+/* =====================================================
+   EMERGENCY RESPONSE
+===================================================== */
+
+.controls-emergency-card {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 24px;
+
+  padding: 24px;
+
+  margin-bottom: 22px;
+
+  border-radius: 18px;
+
+  background: var(--surface);
+
+  border:
+    1px solid rgba(239, 68, 68, 0.24);
+
+  box-shadow: var(--shadow);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.controls-emergency-card:hover {
+  border-color:
+    rgba(239, 68, 68, 0.38);
+
+  box-shadow:
+    0 12px 32px rgba(239, 68, 68, 0.07);
+}
+
+.controls-emergency-content {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  min-width: 0;
+}
+
+.controls-emergency-icon {
+  width: 52px;
+  height: 52px;
+
+  flex: 0 0 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  color: #EF4444;
+
+  background:
+    rgba(239, 68, 68, 0.08);
+}
+
+.controls-section-label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #EF4444;
+
+  font-size: 10px;
+  font-weight: 750;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+}
+
+.controls-emergency-card h2 {
+  margin: 0 0 6px;
+
+  color: var(--text);
+
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.controls-emergency-card p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.controls-emergency-actions {
+  flex: 0 0 auto;
+}
+
+
+/* =====================================================
+   EMERGENCY BUTTONS
+===================================================== */
+
+.controls-emergency-btn,
+.controls-reset-btn {
+  min-height: 45px;
+
+  padding: 0 18px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border-radius: 10px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.controls-emergency-btn {
+  color: #EF4444;
+
+  background:
+    rgba(239, 68, 68, 0.08);
+
+  border:
+    1px solid rgba(239, 68, 68, 0.28);
+}
+
+.controls-emergency-btn:hover:not(:disabled) {
+  background:
+    rgba(239, 68, 68, 0.14);
+
+  border-color: #EF4444;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 20px rgba(239, 68, 68, 0.10);
+}
+
+.controls-reset-btn {
+  color: #16A34A;
+
+  background:
+    rgba(34, 197, 94, 0.08);
+
+  border:
+    1px solid rgba(34, 197, 94, 0.25);
+}
+
+.controls-reset-btn:hover:not(:disabled) {
+  background:
+    rgba(34, 197, 94, 0.13);
+
+  border-color: #22C55E;
+
+  transform: translateY(-1px);
+}
+
+.controls-emergency-btn:disabled,
+.controls-reset-btn:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.55;
+
+  transform: none;
+}
+
+
+/* =====================================================
+   LAST CONTROL ACTION
+===================================================== */
+
+.controls-last-action {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 18px 20px;
+
+  border-radius: 16px;
+
+  background: var(--surface);
+
+  border:
+    1px solid var(--border);
+
+  box-shadow: var(--shadow);
+}
+
+.controls-last-action-icon {
+  width: 42px;
+  height: 42px;
+
+  flex: 0 0 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background:
+    rgba(108, 92, 231, 0.10);
+
+  color: var(--primary);
+}
+
+.controls-last-action span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+}
+
+.controls-last-action strong {
+  color: var(--text);
+
+  font-size: 13px;
+
+  font-weight: 650;
+}
+
+
+/* =====================================================
+   SYSTEM STATUS
+===================================================== */
+
+.controls-system-state {
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+
+  white-space: nowrap;
+}
+
+.controls-state-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+}
+
+.controls-state-dot.normal {
+  background: #22C55E;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(34, 197, 94, 0.10);
+}
+
+.controls-state-dot.critical {
+  background: #EF4444;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(239, 68, 68, 0.10);
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.controls-loading {
+  min-height: 420px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+}
+
+.controls-spin {
+  animation:
+    controlsSpin 1s linear infinite;
+
+  color: var(--primary);
+}
+
+@keyframes controlsSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =====================================================
+   LARGE DESKTOP
+===================================================== */
+
+@media (min-width: 1400px) {
+  .controls-page {
+    max-width: 1200px;
+  }
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1100px) {
+  .controls-title-icon {
+    left: -210px;
+  }
+
+  .controls-status-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .controls-status-card:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* =====================================================
+   SMALL TABLET
+===================================================== */
+
+@media (max-width: 850px) {
+  .controls-page {
+    max-width: 100%;
+  }
+
+  .controls-status-card {
+    padding: 20px;
+  }
+
+  .controls-emergency-card {
+    gap: 18px;
+    padding: 20px;
+  }
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 760px) {
+  .controls-header {
+    min-height: auto;
+
+    padding-top: 112px;
+
+    flex-direction: column;
+  }
+
+  .controls-title-icon {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 88px;
+    height: 88px;
+
+    border-radius: 22px;
+  }
+
+  .controls-title-icon svg {
+    width: 38px;
+    height: 38px;
+  }
+
+  .controls-title-area {
+    width: 100%;
+  }
+
+  .controls-brand {
+    margin-bottom: 14px;
+  }
+
+  .controls-header h1 {
+    font-size: 34px;
+  }
+
+  .controls-header p {
+    font-size: 15px;
+  }
+
+  .controls-refresh-btn {
+    position: static;
+
+    width: 100%;
+
+    margin-top: 20px;
+  }
+
+  .controls-status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .controls-status-card:last-child {
+    grid-column: auto;
+  }
+
+  .controls-emergency-card {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .controls-emergency-actions {
+    width: 100%;
+  }
+
+  .controls-emergency-btn,
+  .controls-reset-btn {
+    width: 100%;
+  }
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 520px) {
+  .controls-title-icon {
+    width: 78px;
+    height: 78px;
+  }
+
+  .controls-title-icon svg {
+    width: 34px;
+    height: 34px;
+  }
+
+  .controls-header {
+    padding-top: 100px;
+  }
+
+  .controls-header h1 {
+    font-size: 30px;
+  }
+
+  .controls-action-row {
+    grid-template-columns: 1fr;
+  }
+
+  .controls-last-action {
+    align-items: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  .controls-system-state {
+    margin-left: 0;
+
+    margin-top: 4px;
+  }
+
+  .controls-simulation-banner {
+    align-items: flex-start;
+  }
+
+  .controls-simulation-banner span {
+    font-size: 12px;
+  }
+}
+
+
+/* =====================================================
+   LIGHT MODE
+===================================================== */
+
+[data-theme="light"] .controls-page {
+  color: #172033;
+}
+
+[data-theme="light"] .controls-title-icon {
+  background:
+    rgba(91, 75, 196, 0.10);
+
+  border-color:
+    rgba(91, 75, 196, 0.28);
+
+  color: #5B4BC4;
+
+  box-shadow:
+    0 0 20px rgba(91, 75, 196, 0.06);
+}
+
+[data-theme="light"] .controls-title-icon svg {
+  color: #5B4BC4 !important;
+  stroke: #5B4BC4 !important;
+}
+
+[data-theme="light"] .controls-brand {
+  color: #5B4BC4;
+}
+
+[data-theme="light"] .controls-header h1 {
+  color: #172033;
+}
+
+[data-theme="light"] .controls-header p {
+  color: #64748B;
+}
+
+[data-theme="light"] .controls-refresh-btn {
+  background: #FFFFFF;
+
+  border-color:
+    rgba(91, 75, 196, 0.28);
+
+  color: #172033;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.07);
+}
+
+[data-theme="light"] .controls-refresh-btn:hover:not(:disabled) {
+  background:
+    rgba(91, 75, 196, 0.06);
+
+  border-color: #5B4BC4;
+
+  color: #5B4BC4;
+}
+
+[data-theme="light"] .controls-simulation-banner {
+  background:
+    rgba(0, 156, 192, 0.06);
+
+  border-color:
+    rgba(0, 156, 192, 0.20);
+}
+
+[data-theme="light"] .controls-banner-icon {
+  background:
+    rgba(0, 156, 192, 0.08);
+
+  color: #009CC0;
+}
+
+[data-theme="light"] .controls-simulation-banner strong {
+  color: #009CC0;
+}
+
+[data-theme="light"] .controls-simulation-banner span {
+  color: #64748B;
+}
+
+[data-theme="light"] .controls-message-success {
+  color: #16A34A;
+
+  background:
+    rgba(22, 163, 74, 0.07);
+
+  border-color:
+    rgba(22, 163, 74, 0.18);
+}
+
+[data-theme="light"] .controls-message-error {
+  color: #DC3545;
+
+  background:
+    rgba(220, 53, 69, 0.07);
+
+  border-color:
+    rgba(220, 53, 69, 0.18);
+}
+
+
+/* =====================================================
+   LIGHT CARDS
+===================================================== */
+
+[data-theme="light"] .controls-status-card,
+[data-theme="light"] .controls-emergency-card,
+[data-theme="light"] .controls-last-action {
+  background: #FFFFFF;
+
+  border-color:
+    rgba(15, 23, 42, 0.10);
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.07);
+}
+
+[data-theme="light"] .controls-status-card:hover {
+  border-color:
+    rgba(91, 75, 196, 0.28);
+
+  box-shadow:
+    0 12px 32px rgba(15, 23, 42, 0.10);
+}
+
+[data-theme="light"] .controls-status-card h3,
+[data-theme="light"] .controls-emergency-card h2,
+[data-theme="light"] .controls-last-action strong {
+  color: #172033;
+}
+
+[data-theme="light"] .controls-status-card p,
+[data-theme="light"] .controls-emergency-card p,
+[data-theme="light"] .controls-last-action span,
+[data-theme="light"] .controls-system-state {
+  color: #64748B;
+}
+
+[data-theme="light"] .valve-icon {
+  background:
+    rgba(91, 75, 196, 0.10);
+
+  color: #5B4BC4;
+}
+
+[data-theme="light"] .motor-icon {
+  background:
+    rgba(0, 156, 192, 0.09);
+
+  color: #009CC0;
+}
+
+[data-theme="light"] .auto-icon {
+  background:
+    rgba(22, 163, 74, 0.09);
+
+  color: #16A34A;
+}
+
+[data-theme="light"] .status-inactive {
+  background: #F5F7FB;
+
+  border-color:
+    rgba(15, 23, 42, 0.08);
+
+  color: #64748B;
+}
+
+[data-theme="light"] .controls-action-btn,
+[data-theme="light"] .controls-toggle-btn {
+  background: #F5F7FB;
+
+  border-color:
+    rgba(15, 23, 42, 0.09);
+
+  color: #64748B;
+}
+
+[data-theme="light"] .controls-action-btn:hover:not(:disabled) {
+  background:
+    rgba(91, 75, 196, 0.05);
+
+  border-color: #5B4BC4;
+
+  color: #334155;
+}
+
+[data-theme="light"] .controls-action-btn.selected {
+  background:
+    rgba(91, 75, 196, 0.09);
+
+  border-color:
+    rgba(91, 75, 196, 0.30);
+
+  color: #5B4BC4;
+}
+
+[data-theme="light"] .controls-toggle-btn:hover:not(:disabled) {
+  background:
+    rgba(22, 163, 74, 0.05);
+
+  border-color: #16A34A;
+
+  color: #16A34A;
+}
+
+[data-theme="light"] .controls-toggle-btn.toggle-on {
+  background:
+    rgba(22, 163, 74, 0.08);
+
+  border-color:
+    rgba(22, 163, 74, 0.22);
+
+  color: #16A34A;
+}
+
+
+/* =====================================================
+   LIGHT EMERGENCY
+===================================================== */
+
+[data-theme="light"] .controls-emergency-card {
+  border-color:
+    rgba(220, 53, 69, 0.20);
+}
+
+[data-theme="light"] .controls-emergency-icon {
+  background:
+    rgba(220, 53, 69, 0.07);
+
+  color: #DC3545;
+}
+
+[data-theme="light"] .controls-section-label {
+  color: #DC3545;
+}
+
+[data-theme="light"] .controls-emergency-btn {
+  background:
+    rgba(220, 53, 69, 0.07);
+
+  border-color:
+    rgba(220, 53, 69, 0.22);
+
+  color: #DC3545;
+}
+
+[data-theme="light"] .controls-emergency-btn:hover:not(:disabled) {
+  background:
+    rgba(220, 53, 69, 0.12);
+
+  border-color: #DC3545;
+}
+
+[data-theme="light"] .controls-reset-btn {
+  background:
+    rgba(22, 163, 74, 0.07);
+
+  border-color:
+    rgba(22, 163, 74, 0.20);
+
+  color: #16A34A;
+}
+
+[data-theme="light"] .controls-reset-btn:hover:not(:disabled) {
+  background:
+    rgba(22, 163, 74, 0.12);
+
+  border-color: #16A34A;
+}
+
+[data-theme="light"] .controls-last-action-icon {
+  background:
+    rgba(91, 75, 196, 0.09);
+
+  color: #5B4BC4;
+}
+
+[data-theme="light"] .controls-loading {
+  color: #64748B;
+}
+
+
+/* =====================================================
+   SMOOTH THEME TRANSITION
+===================================================== */
+
+.controls-page,
+.controls-page * {
+  transition:
+    background-color 0.20s ease,
+    border-color 0.20s ease,
+    color 0.20s ease,
+    box-shadow 0.20s ease,
+    transform 0.20s ease;
+}

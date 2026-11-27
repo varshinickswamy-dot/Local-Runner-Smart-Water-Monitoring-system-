@@ -1,0 +1,103 @@
+/* =========================================================
+   SENSOR CHART
+========================================================= */
+
+.sensor-chart-card {
+  background: #151B2E;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 0;
+  overflow: hidden;
+  transition: 0.25s ease;
+}
+
+.sensor-chart-card:hover {
+  border-color: rgba(108, 92, 231, 0.35);
+  transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.sensor-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.sensor-chart-header h3 {
+  margin: 0;
+  color: #F8FAFC;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.sensor-chart-header p {
+  margin: 6px 0 0;
+  color: #94A3B8;
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   CHART AREA
+========================================================= */
+
+.sensor-chart {
+  width: 100%;
+  height: 300px;
+  min-height: 300px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.chart-empty {
+  width: 100%;
+  min-height: 220px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #94A3B8;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .sensor-chart-card {
+    padding: 18px;
+  }
+
+  .sensor-chart {
+    height: 260px;
+    min-height: 260px;
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .sensor-chart-card {
+    padding: 15px;
+  }
+
+  .sensor-chart {
+    height: 230px;
+    min-height: 230px;
+  }
+
+}

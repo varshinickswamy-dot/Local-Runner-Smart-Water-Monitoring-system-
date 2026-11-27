@@ -1,0 +1,786 @@
+/* =====================================================
+   JalRakshak AI
+   Live Data
+   Dashboard-Matched UI
+===================================================== */
+
+.live-data-page {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100%;
+  margin: 0 auto;
+  color: #F8FAFC;
+  animation: liveDataFadeIn 0.35s ease;
+}
+
+@keyframes liveDataFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.live-data-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.live-data-eyebrow {
+  margin: 0 0 7px;
+  color: #00D4FF;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.live-data-header h1 {
+  margin: 0;
+  color: #F8FAFC;
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.7px;
+}
+
+.live-data-header p:last-child {
+  margin: 7px 0 0;
+  color: #94A3B8;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   LIVE STATUS
+===================================================== */
+
+.live-connection-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 9px 13px;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.7px;
+}
+
+.live-status-online {
+  color: #22C55E;
+  background: rgba(34, 197, 94, 0.09);
+  border: 1px solid rgba(34, 197, 94, 0.15);
+}
+
+.live-status-offline {
+  color: #EF4444;
+  background: rgba(239, 68, 68, 0.09);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+
+/* =====================================================
+   DEVICE BAR
+===================================================== */
+
+.live-device-bar {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 20px;
+}
+
+.live-device-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  min-width: 0;
+
+  padding: 14px 16px;
+
+  background: #151B2E;
+
+  border: 1px solid
+    rgba(148, 163, 184, 0.12);
+
+  border-radius: 13px;
+
+  color: #6C5CE7;
+}
+
+.live-device-item > div {
+  min-width: 0;
+}
+
+.live-device-item span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #64748B;
+
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.live-device-item strong {
+  display: block;
+
+  color: #E2E8F0;
+
+  font-size: 12px;
+  font-weight: 750;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   WARNING
+===================================================== */
+
+.live-data-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 20px;
+  padding: 13px 16px;
+
+  background: rgba(245, 158, 11, 0.07);
+
+  border: 1px solid
+    rgba(245, 158, 11, 0.15);
+
+  border-radius: 12px;
+
+  color: #F59E0B;
+
+  font-size: 11px;
+}
+
+
+/* =====================================================
+   SENSOR GRID
+===================================================== */
+
+.live-sensor-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 16px;
+
+  width: 100%;
+
+  margin-bottom: 24px;
+}
+
+
+/* =====================================================
+   SENSOR CARD
+===================================================== */
+
+.live-sensor-card {
+  position: relative;
+
+  min-width: 0;
+
+  padding: 19px;
+
+  overflow: hidden;
+
+  background: #151B2E;
+
+  border: 1px solid
+    rgba(148, 163, 184, 0.12);
+
+  border-radius: 15px;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.live-sensor-card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 42px;
+  height: 2px;
+
+  background: #6C5CE7;
+}
+
+.live-sensor-card:hover {
+  transform: translateY(-2px);
+
+  border-color:
+    rgba(108, 92, 231, 0.32);
+
+  box-shadow:
+    0 10px 28px
+    rgba(0, 0, 0, 0.16);
+}
+
+
+/* =====================================================
+   SENSOR TOP
+===================================================== */
+
+.live-sensor-top {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 16px;
+}
+
+.live-sensor-icon {
+  width: 39px;
+  height: 39px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background:
+    rgba(108, 92, 231, 0.11);
+
+  color: #6C5CE7;
+}
+
+.live-sensor-label {
+  color: #94A3B8;
+
+  font-size: 10px;
+  font-weight: 750;
+
+  letter-spacing: 0.7px;
+}
+
+
+/* =====================================================
+   SENSOR VALUE
+===================================================== */
+
+.live-sensor-value {
+  display: flex;
+  align-items: baseline;
+
+  gap: 7px;
+
+  min-height: 42px;
+
+  color: #F8FAFC;
+
+  font-size: 29px;
+  line-height: 1;
+
+  font-weight: 850;
+
+  letter-spacing: -0.8px;
+}
+
+.live-sensor-value small {
+  color: #64748B;
+
+  font-size: 11px;
+  font-weight: 650;
+
+  letter-spacing: 0;
+}
+
+
+/* =====================================================
+   SENSOR FOOTER
+===================================================== */
+
+.live-sensor-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 8px;
+
+  margin-top: 15px;
+  padding-top: 12px;
+
+  border-top: 1px solid
+    rgba(148, 163, 184, 0.07);
+
+  color: #64748B;
+
+  font-size: 9px;
+}
+
+.sensor-normal {
+  color: #22C55E;
+
+  font-size: 8px;
+  font-weight: 850;
+
+  letter-spacing: 0.5px;
+}
+
+.sensor-warning {
+  color: #F59E0B;
+
+  font-size: 8px;
+  font-weight: 850;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* =====================================================
+   INTELLIGENT DETECTION
+===================================================== */
+
+.live-status-section {
+  width: 100%;
+
+  padding: 21px;
+
+  background: #151B2E;
+
+  border: 1px solid
+    rgba(148, 163, 184, 0.12);
+
+  border-radius: 16px;
+}
+
+.live-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 17px;
+}
+
+.live-section-heading span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #00D4FF;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 1.2px;
+}
+
+.live-section-heading h2 {
+  margin: 0;
+
+  color: #F8FAFC;
+
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.live-section-heading > svg {
+  color: #6C5CE7;
+}
+
+
+/* =====================================================
+   DETECTION GRID
+===================================================== */
+
+.live-detection-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+
+/* =====================================================
+   DETECTION CARD
+===================================================== */
+
+.live-detection-card {
+  min-width: 0;
+
+  padding: 15px;
+
+  background:
+    rgba(11, 16, 32, 0.62);
+
+  border: 1px solid
+    rgba(148, 163, 184, 0.08);
+
+  border-radius: 12px;
+}
+
+.live-detection-card > span {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #64748B;
+
+  font-size: 8px;
+  font-weight: 750;
+
+  letter-spacing: 0.6px;
+}
+
+.live-detection-card strong {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #F8FAFC;
+
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.live-detection-card small {
+  display: block;
+
+  color: #475569;
+
+  font-size: 9px;
+
+  line-height: 1.4;
+}
+
+.detection-normal {
+  color: #22C55E !important;
+}
+
+.detection-warning {
+  color: #F59E0B !important;
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.live-data-loading {
+  min-height: 300px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 11px;
+
+  background: #151B2E;
+
+  border: 1px solid
+    rgba(148, 163, 184, 0.12);
+
+  border-radius: 16px;
+
+  color: #94A3B8;
+
+  font-size: 13px;
+}
+
+.loading-spin {
+  animation:
+    liveDataSpin 1s linear infinite;
+}
+
+@keyframes liveDataSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =====================================================
+   LARGE DESKTOP
+===================================================== */
+
+@media (min-width: 1400px) {
+
+  .live-data-page {
+    max-width: 1200px;
+  }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1000px) {
+
+  .live-sensor-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .live-detection-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =====================================================
+   SMALL TABLET
+===================================================== */
+
+@media (max-width: 800px) {
+
+  .live-device-bar {
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 650px) {
+
+  .live-data-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .live-data-header h1 {
+    font-size: 27px;
+  }
+
+  .live-sensor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .live-detection-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .live-status-section {
+    padding: 17px;
+  }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 450px) {
+
+  .live-sensor-card {
+    padding: 17px;
+  }
+
+  .live-sensor-value {
+    font-size: 26px;
+  }
+
+  .live-section-heading h2 {
+    font-size: 15px;
+  }
+
+}
+
+
+/* =====================================================
+   JALRAKSHAK AI - LIGHT MODE
+   Theme-aware overrides
+   ===================================================== */
+
+[data-theme="light"] .live-data-page {
+  color: #172033;
+}
+
+[data-theme="light"] .live-data-eyebrow {
+  color: #009CC0;
+}
+
+[data-theme="light"] .live-data-header h1 {
+  color: #172033;
+}
+
+[data-theme="light"] .live-data-header p:last-child {
+  color: #64748B;
+}
+
+[data-theme="light"] .live-status-online {
+  color: #16A34A;
+  background: rgba(22, 163, 74, 0.09);
+  border-color: rgba(22, 163, 74, 0.15);
+}
+
+[data-theme="light"] .live-status-offline {
+  color: #DC3545;
+  background: rgba(220, 53, 69, 0.09);
+  border-color: rgba(220, 53, 69, 0.15);
+}
+
+[data-theme="light"] .live-device-item,
+[data-theme="light"] .live-sensor-card,
+[data-theme="light"] .live-status-section,
+[data-theme="light"] .live-data-loading {
+  background: #FFFFFF;
+  border-color: rgba(15, 23, 42, 0.10);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
+}
+
+[data-theme="light"] .live-device-item {
+  color: #5B4BC4;
+}
+
+[data-theme="light"] .live-device-item span {
+  color: #64748B;
+}
+
+[data-theme="light"] .live-device-item strong {
+  color: #334155;
+}
+
+[data-theme="light"] .live-data-warning {
+  background: rgba(217, 119, 6, 0.08);
+  border-color: rgba(217, 119, 6, 0.18);
+  color: #B45309;
+}
+
+[data-theme="light"] .live-sensor-card:hover {
+  border-color: rgba(91, 75, 196, 0.28);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.10);
+}
+
+[data-theme="light"] .live-sensor-card::before {
+  background: #5B4BC4;
+}
+
+[data-theme="light"] .live-sensor-icon {
+  background: rgba(91, 75, 196, 0.10);
+  color: #5B4BC4;
+}
+
+[data-theme="light"] .live-sensor-label {
+  color: #64748B;
+}
+
+[data-theme="light"] .live-sensor-value {
+  color: #172033;
+}
+
+[data-theme="light"] .live-sensor-value small {
+  color: #64748B;
+}
+
+[data-theme="light"] .live-sensor-footer {
+  border-top-color: rgba(15, 23, 42, 0.08);
+  color: #64748B;
+}
+
+[data-theme="light"] .sensor-normal {
+  color: #16A34A;
+}
+
+[data-theme="light"] .sensor-warning {
+  color: #D97706;
+}
+
+[data-theme="light"] .live-status-section {
+  background: #FFFFFF;
+}
+
+[data-theme="light"] .live-section-heading span {
+  color: #009CC0;
+}
+
+[data-theme="light"] .live-section-heading h2 {
+  color: #172033;
+}
+
+[data-theme="light"] .live-section-heading > svg {
+  color: #5B4BC4;
+}
+
+[data-theme="light"] .live-detection-card {
+  background: #F5F7FB;
+  border-color: rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .live-detection-card > span {
+  color: #64748B;
+}
+
+[data-theme="light"] .live-detection-card strong {
+  color: #172033;
+}
+
+[data-theme="light"] .live-detection-card small {
+  color: #64748B;
+}
+
+[data-theme="light"] .detection-normal {
+  color: #16A34A !important;
+}
+
+[data-theme="light"] .detection-warning {
+  color: #D97706 !important;
+}
+
+[data-theme="light"] .live-data-loading {
+  color: #64748B;
+}
+
+/* Smooth theme transition for this page */
+.live-data-page,
+.live-data-page * {
+  transition:
+    background-color 0.20s ease,
+    border-color 0.20s ease,
+    color 0.20s ease,
+    box-shadow 0.20s ease;
+}
