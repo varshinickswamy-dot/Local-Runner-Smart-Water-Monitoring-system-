@@ -1201,7 +1201,7 @@ def get_dashboard_summary():
     # =====================================================
 
     latest_data = sensor_readings_collection.find_one(
-        {"source": {"$in": ["ESP32", "SIMULATOR"]}, "record_type": {"$ne": "SUPPLEMENTAL"}},
+        {"source": "ESP32", "zone_id": "ZONE-01"},
         sort=[("timestamp", -1)]
     )
 
