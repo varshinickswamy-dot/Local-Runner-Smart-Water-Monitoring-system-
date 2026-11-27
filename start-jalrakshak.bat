@@ -1,6 +1,6 @@
 @echo off
-REM Starts MongoDB, the backend, the sensor simulator and the frontend,
-REM each in its own window. Close a window to stop that part.
+REM Starts MongoDB, the backend and the frontend.
+REM Connect a physical ESP32 with connect-esp32.bat (USB) or configure device WiFi.
 
 set ROOT=%~dp0
 
@@ -15,8 +15,6 @@ if errorlevel 1 (
 
 start "Backend (port 8000)" cmd /k "cd /d %ROOT%backend && .venv-local\Scripts\python -m uvicorn main:app --port 8000"
 timeout /t 8 /nobreak >nul
-
-start "Sensor Simulator" cmd /k "cd /d %ROOT%backend && .venv-local\Scripts\python simulator.py"
 
 start "Frontend (port 5173)" cmd /k "cd /d %ROOT%frontend && npm run dev"
 timeout /t 5 /nobreak >nul
