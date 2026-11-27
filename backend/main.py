@@ -755,6 +755,7 @@ def receive_sensor_data(data: SensorData):
     sensor_record["timestamp"] = datetime.now(
         timezone.utc
     )
+    sensor_record["source"] = "ESP32"
 
     # Store detection results together with sensor data
     sensor_record["detection"] = detection_result
@@ -776,6 +777,7 @@ def receive_sensor_data(data: SensorData):
     # -----------------------------------------------------
 
     for alert in alerts:
+        alert["source"] = "ESP32"
         alerts_collection.insert_one(alert)
 
     # -----------------------------------------------------
@@ -884,7 +886,7 @@ def get_latest_sensor_data():
 
     # Find newest sensor reading
     latest_data = sensor_readings_collection.find_one(
-        {},
+        {"source": "ESP32"},
         sort=[("timestamp", -1)]
     )
 
@@ -930,7 +932,7 @@ def get_sensor_history(
     # Build MongoDB query
     # -----------------------------------------------------
 
-    query = {}
+    query = {"source": "ESP32"}
 
     if device_id:
         query["device_id"] = device_id
@@ -998,7 +1000,7 @@ def get_alerts(
     # Build MongoDB filter
     # -----------------------------------------------------
 
-    query = {}
+    query = {"source": "ESP32"}
 
     if type:
         query["type"] = type.upper()
@@ -1063,6 +1065,7 @@ def get_devices():
     # -----------------------------------------------------
 
     pipeline = [
+        {"$match": {"source": "ESP32"}},
         {
             "$sort": {
                 "timestamp": -1
@@ -1196,7 +1199,7 @@ def get_dashboard_summary():
     # =====================================================
 
     latest_data = sensor_readings_collection.find_one(
-        {},
+        {"source": "ESP32"},
         sort=[("timestamp", -1)]
     )
 
@@ -1207,7 +1210,8 @@ def get_dashboard_summary():
     active_alerts = list(
         alerts_collection.find(
             {
-                "status": "ACTIVE"
+                "status": "ACTIVE",
+                "source": "ESP32"
             }
         ).sort(
             "timestamp",
@@ -1570,16 +1574,16 @@ def get_zones():
 
     zones = []
 
-    for zone in ZONES:
+    for zone in ZONES[:1]:  # One physical ESP32 device is configured.
 
         latest = sensor_readings_collection.find_one(
-            {"zone_id": zone["zone_id"]},
+            {"zone_id": zone["zone_id"], "source": "ESP32"},
             sort=[("timestamp", -1)]
         )
 
         recent_alerts = list(
             alerts_collection
-            .find({"zone_id": zone["zone_id"]})
+            .find({"zone_id": zone["zone_id"], "source": "ESP32"})
             .sort("timestamp", -1)
             .limit(5)
         )
