@@ -42,31 +42,18 @@ ESP32_USB_IDS = {
     (0x1A86, 0x55D4): "CH9102",
     (0x303A, 0x1001): "ESP32-S3/C3 USB",
     (0x0403, 0x6001): "FTDI",
-}
 
 # Names the ESP32 code may use -> backend field
 FIELD_ALIASES = {
     "flow_rate": ["flow_rate", "flowrate", "flow", "flow_lpm", "water_flow"],
-    "pressure_bar": ["pressure_bar", "pressure", "press", "pressurebar"],
     "ph": ["ph", "ph_value", "phvalue"],
     "turbidity": ["turbidity", "turb", "ntu"],
     "tds": ["tds", "tds_ppm", "ppm"],
     "total_litres": ["total_litres", "total_liters", "totallitres", "total",
                      "litres", "liters", "volume", "total_water"],
-}
 
 SENSOR_FIELDS = ["flow_rate", "ph", "turbidity", "tds"]
 
-# Used for sensors the ESP32 does not have. These are normal
-# values, so a missing sensor does not cause false alerts
-# (pH 0 or pressure 0 would look like a real problem).
-PLACEHOLDERS = {
-    "flow_rate": 0.0,
-    "pressure_bar": 0.85,
-    "ph": 7.0,
-    "turbidity": 1.0,
-    "tds": 150.0,
-}
 
 
 def normalize(name):
@@ -77,7 +64,6 @@ ALIAS_LOOKUP = {
     normalize(alias): field
     for field, aliases in FIELD_ALIASES.items()
     for alias in aliases
-}
 
 
 # -----------------------------------------------------
@@ -257,8 +243,7 @@ def main():
                 "device_id": values.get("device_id", args.device_id),
                 "zone_id": values.get("zone_id", args.zone_id),
                 "source": "ESP32",
-                **{field: max(0.0, sensors.get(field, PLACEHOLDERS[field]))
-                   for field in SENSOR_FIELDS},
+                **{field: max(0.0, sensors[field]) for field in SENSOR_FIELDS},
                 "total_litres": round(max(0.0, total_litres), 2),
                 "status": "NORMAL",
                 "alert": "Real ESP32 reading (four connected sensors only)",
