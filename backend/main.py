@@ -244,12 +244,22 @@ async def get_me(current_user=Depends(get_current_user)):
 @app.get("/api/controls")
 def get_controls(current_user=Depends(get_current_user)):
     """
-    Return the current software control state.
-    Authentication is required.
+    Report hardware capabilities for the current sensor-only ESP32 setup.
     """
     return {
         "success": True,
-        "data": get_control_state(),
+        "data": {
+            "mode": "SENSOR_ONLY",
+            "available": False,
+            "message": (
+                "This ESP32 installation has sensors only. "
+                "Motor, valve and relay controls are not installed."
+            ),
+            "actuators": {
+                "motor": False,
+                "valve": False
+            }
+        },
     }
 
 
