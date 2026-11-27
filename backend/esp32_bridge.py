@@ -55,7 +55,7 @@ FIELD_ALIASES = {
                      "litres", "liters", "volume", "total_water"],
 }
 
-SENSOR_FIELDS = ["flow_rate", "pressure_bar", "ph", "turbidity", "tds"]
+SENSOR_FIELDS = ["flow_rate", "ph", "turbidity", "tds"]
 
 # Used for sensors the ESP32 does not have. These are normal
 # values, so a missing sensor does not cause false alerts
@@ -238,16 +238,6 @@ def main():
                 # Boot messages, debug prints, etc.
                 print(f"{now}  (ignored) {line[:100]}")
                 continue
-
-            # Sensors the ESP32 does not report yet
-            missing = [f for f in SENSOR_FIELDS if f not in sensors]
-            new_missing = set(missing) - warned_missing
-            if new_missing:
-                print(f"⚠️  ESP32 does not send: {', '.join(sorted(new_missing))}."
-                      " Using normal placeholder values for these"
-                      f" ({', '.join(f'{f}={PLACEHOLDERS[f]}' for f in sorted(new_missing))}),"
-                      " so they are NOT real measurements.")
-                warned_missing |= new_missing
 
             # Count total water from flow if the ESP32 does not send it
             if "total_litres" in values:
