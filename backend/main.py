@@ -1002,7 +1002,7 @@ def get_alerts(
     # Build MongoDB filter
     # -----------------------------------------------------
 
-    query = {"source": "ESP32"}
+    query = {"source": {"$in": ["ESP32", "SIMULATOR"]}}
 
     if type:
         query["type"] = type.upper()
@@ -1201,7 +1201,7 @@ def get_dashboard_summary():
     # =====================================================
 
     latest_data = sensor_readings_collection.find_one(
-        {"source": "ESP32"},
+        {"source": {"$in": ["ESP32", "SIMULATOR"]}, "record_type": {"$ne": "SUPPLEMENTAL"}},
         sort=[("timestamp", -1)]
     )
 
@@ -1213,7 +1213,7 @@ def get_dashboard_summary():
         alerts_collection.find(
             {
                 "status": "ACTIVE",
-                "source": "ESP32"
+                "source": {"$in": ["ESP32", "SIMULATOR"]}
             }
         ).sort(
             "timestamp",
