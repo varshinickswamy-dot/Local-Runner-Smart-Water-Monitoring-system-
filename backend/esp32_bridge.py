@@ -248,6 +248,11 @@ def main():
                     total_litres += sensors["flow_rate"] * (current - last_time) / 60
                 last_time = current
 
+            missing = [field for field in SENSOR_FIELDS if field not in sensors]
+            if missing:
+                print("Waiting for actual ESP32 fields: " + ", ".join(missing))
+                continue
+
             reading = {
                 "device_id": values.get("device_id", args.device_id),
                 "zone_id": values.get("zone_id", args.zone_id),
@@ -256,7 +261,7 @@ def main():
                    for field in SENSOR_FIELDS},
                 "total_litres": round(max(0.0, total_litres), 2),
                 "status": "NORMAL",
-                "alert": "Real ESP32 reading",
+                "alert": "Real ESP32 reading (four connected sensors only)",
             }
 
             # pH must be 0-14 for the backend
