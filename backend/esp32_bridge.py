@@ -261,6 +261,7 @@ def main():
             reading = {
                 "device_id": values.get("device_id", args.device_id),
                 "zone_id": values.get("zone_id", args.zone_id),
+                "source": "ESP32",
                 **{field: max(0.0, sensors.get(field, PLACEHOLDERS[field]))
                    for field in SENSOR_FIELDS},
                 "total_litres": round(max(0.0, total_litres), 2),
