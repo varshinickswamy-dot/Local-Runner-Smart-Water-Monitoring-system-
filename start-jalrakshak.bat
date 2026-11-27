@@ -1,6 +1,6 @@
 @echo off
 REM Starts MongoDB, the backend and the frontend.
-REM Connect a physical ESP32 with connect-esp32.bat (USB) or configure device WiFi.
+REM Starts the hybrid simulator (pressure + virtual zones). Connect ESP32 with connect-esp32.bat.
 
 set ROOT=%~dp0
 
@@ -15,6 +15,9 @@ if errorlevel 1 (
 
 start "Backend (port 8000)" cmd /k "cd /d %ROOT%backend && .venv-local\Scripts\python -m uvicorn main:app --port 8000"
 timeout /t 8 /nobreak >nul
+
+start "Hybrid simulator (pressure + simulated zones)" cmd /k "cd /d %ROOT%backend && .venv-local\Scripts\python simulator.py"
+timeout /t 3 /nobreak >nul
 
 start "Frontend (port 5173)" cmd /k "cd /d %ROOT%frontend && npm run dev"
 timeout /t 5 /nobreak >nul
