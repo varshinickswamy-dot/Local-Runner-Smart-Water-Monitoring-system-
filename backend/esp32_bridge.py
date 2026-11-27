@@ -47,7 +47,6 @@ ESP32_USB_IDS = {
 # Names the ESP32 code may use -> backend field
 FIELD_ALIASES = {
     "flow_rate": ["flow_rate", "flowrate", "flow", "flow_lpm", "water_flow"],
-    "pressure_bar": ["pressure_bar", "pressure", "press", "pressurebar"],
     "ph": ["ph", "ph_value", "phvalue"],
     "turbidity": ["turbidity", "turb", "ntu"],
     "tds": ["tds", "tds_ppm", "ppm"],
@@ -55,18 +54,9 @@ FIELD_ALIASES = {
                      "litres", "liters", "volume", "total_water"],
 }
 
-SENSOR_FIELDS = ["flow_rate", "pressure_bar", "ph", "turbidity", "tds"]
+SENSOR_FIELDS = ["flow_rate", "ph", "turbidity", "tds"]
 
-# Used for sensors the ESP32 does not have. These are normal
-# values, so a missing sensor does not cause false alerts
-# (pH 0 or pressure 0 would look like a real problem).
-PLACEHOLDERS = {
-    "flow_rate": 0.0,
-    "pressure_bar": 0.85,
-    "ph": 7.0,
-    "turbidity": 1.0,
-    "tds": 150.0,
-}
+# Missing hardware fields are omitted, never replaced with fake values.
 
 
 def normalize(name):
@@ -239,16 +229,6 @@ def main():
                 print(f"{now}  (ignored) {line[:100]}")
                 continue
 
-            # Sensors the ESP32 does not report yet
-            missing = [f for f in SENSOR_FIELDS if f not in sensors]
-            new_missing = set(missing) - warned_missing
-            if new_missing:
-                print(f"⚠️  ESP32 does not send: {', '.join(sorted(new_missing))}."
-                      " Using normal placeholder values for these"
-                      f" ({', '.join(f'{f}={PLACEHOLDERS[f]}' for f in sorted(new_missing))}),"
-                      " so they are NOT real measurements.")
-                warned_missing |= new_missing
-
             # Count total water from flow if the ESP32 does not send it
             if "total_litres" in values:
                 total_litres = values["total_litres"]
@@ -258,15 +238,19 @@ def main():
                     total_litres += sensors["flow_rate"] * (current - last_time) / 60
                 last_time = current
 
+            missing = [field for field in SENSOR_FIELDS if field not in sensors]
+            if missing:
+                print("Waiting for actual ESP32 fields: " + ", ".join(missing))
+                continue
+
             reading = {
                 "device_id": values.get("device_id", args.device_id),
                 "zone_id": values.get("zone_id", args.zone_id),
                 "source": "ESP32",
-                **{field: max(0.0, sensors.get(field, PLACEHOLDERS[field]))
-                   for field in SENSOR_FIELDS},
+                **{field: max(0.0, sensors[field]) for field in SENSOR_FIELDS},
                 "total_litres": round(max(0.0, total_litres), 2),
                 "status": "NORMAL",
-                "alert": "Real ESP32 reading",
+                "alert": "Real ESP32 reading (four connected sensors only)",
             }
 
             # pH must be 0-14 for the backend

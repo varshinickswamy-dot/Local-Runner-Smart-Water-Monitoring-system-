@@ -202,6 +202,7 @@ function Dashboard({ dashboard }) {
           timestamp: latestUpdate.timestamp,
           detection: latestUpdate.detection || {},
           ai_detection: latestUpdate.ai_detection || {},
+          field_sources: latestUpdate.field_sources || {},
         }
       : null;
 
@@ -643,7 +644,7 @@ function Dashboard({ dashboard }) {
             </h2>
 
             <p className="section-subtitle">
-              Real-time measurements from the connected ESP32
+              ESP32: flow, pH, turbidity and TDS | Simulator: pressure and virtual zones
             </p>
 
           </div>
