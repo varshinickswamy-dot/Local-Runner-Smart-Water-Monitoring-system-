@@ -4,9 +4,7 @@
 #
 #   1. Finds the ESP32's COM port
 #   2. Uploads JalRakshakDevice.ino (skip with -NoUpload)
-#   3. Restarts the simulator WITHOUT zone ZONE-01, so it
-#      does not overwrite the real device's readings
-#   4. Starts the USB bridge (ESP32 -> website -> LCD)
+#   3. Starts the USB bridge (ESP32 -> website -> LCD)
 #
 # Run from the jalrakshak-ai folder:
 #   powershell -ExecutionPolicy Bypass -File esp32\connect-esp32.ps1
@@ -63,22 +61,11 @@ if (-not $NoUpload) {
 }
 
 # ---------------------------------------------------
-# 3. Simulator without the real device's zone
-# ---------------------------------------------------
-Step "Restarting the simulator without ZONE-01 (real device zone)..."
-
-Get-CimInstance Win32_Process -Filter "Name='python.exe'" |
-    Where-Object { $_.CommandLine -match "simulator\.py|esp32_bridge\.py" } |
-    ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
-
-Start-Process cmd -ArgumentList "/k title JalRakshak Simulator && cd /d `"$backend`" && `"$python`" simulator.py --exclude-zone ZONE-01"
-
-# ---------------------------------------------------
-# 4. USB bridge
+# 3. USB bridge
 # ---------------------------------------------------
 Step "Starting the ESP32 bridge on $port..."
 
 Start-Process cmd -ArgumentList "/k title JalRakshak ESP32 Bridge && cd /d `"$backend`" && `"$python`" esp32_bridge.py --port $port"
 
-Write-Host "`nDone! Your ESP32 is the 'Malleshwaram' zone on http://localhost:5173/zone-map?zone=ZONE-01" -ForegroundColor Green
+Write-Host "`nDone! Your physical ESP32 is now sending sensor readings to JalRakshak AI." -ForegroundColor Green
 Write-Host "Keep the 'JalRakshak ESP32 Bridge' window open."
