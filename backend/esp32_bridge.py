@@ -243,11 +243,6 @@ def main():
                 print("Waiting for actual ESP32 fields: " + ", ".join(missing))
                 continue
 
-            missing = [field for field in SENSOR_FIELDS if field not in sensors]
-            if missing:
-                print("Waiting for actual ESP32 fields: " + ", ".join(missing))
-                continue
-
             reading = {
                 "device_id": values.get("device_id", args.device_id),
                 "zone_id": values.get("zone_id", args.zone_id),
