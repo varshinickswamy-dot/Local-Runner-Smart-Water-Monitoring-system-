@@ -888,7 +888,7 @@ def get_latest_sensor_data():
 
     # Find newest sensor reading
     latest_data = sensor_readings_collection.find_one(
-        {"source": {"$in": ["ESP32", "SIMULATOR"]}, "record_type": {"$ne": "SUPPLEMENTAL"}},
+        {"source": "ESP32", "zone_id": "ZONE-01"},
         sort=[("timestamp", -1)]
     )
 
@@ -934,7 +934,7 @@ def get_sensor_history(
     # Build MongoDB query
     # -----------------------------------------------------
 
-    query = {"source": {"$in": ["ESP32", "SIMULATOR"]}, "record_type": {"$ne": "SUPPLEMENTAL"}}
+    query = {"source": "ESP32", "zone_id": "ZONE-01"}
 
     if device_id:
         query["device_id"] = device_id
