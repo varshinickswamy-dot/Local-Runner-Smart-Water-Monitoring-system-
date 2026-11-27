@@ -1,6 +1,6 @@
 def analyze_sensor_data(
     flow_rate: float,
-    pressure_bar: float,
+    pressure_bar: float | None,
     ph: float,
     turbidity: float,
     tds: float,
@@ -39,7 +39,7 @@ def analyze_sensor_data(
 
     # Critical leakage:
     # High flow + very low pressure
-    if pressure_bar < 0.5 and flow_rate > 5.0:
+    if pressure_bar is not None and pressure_bar < 0.5 and flow_rate > 5.0:
 
         leakage_detected = True
         leakage_level = "CRITICAL"
@@ -49,7 +49,7 @@ def analyze_sensor_data(
         )
 
     # Very high flow with low pressure
-    elif pressure_bar < 0.7 and flow_rate > 30.0:
+    elif pressure_bar is not None and pressure_bar < 0.7 and flow_rate > 30.0:
 
         leakage_detected = True
         leakage_level = "MAJOR"
@@ -59,7 +59,7 @@ def analyze_sensor_data(
         )
 
     # Moderate flow abnormality with reduced pressure
-    elif pressure_bar < 0.7 and flow_rate > 20.0:
+    elif pressure_bar is not None and pressure_bar < 0.7 and flow_rate > 20.0:
 
         leakage_detected = True
         leakage_level = "MODERATE"
@@ -69,7 +69,7 @@ def analyze_sensor_data(
         )
 
     # Slightly abnormal flow with reduced pressure
-    elif pressure_bar < 0.7 and flow_rate > 15.0:
+    elif pressure_bar is not None and pressure_bar < 0.7 and flow_rate > 15.0:
 
         leakage_detected = True
         leakage_level = "MINOR"
@@ -82,7 +82,7 @@ def analyze_sensor_data(
     # 2. PRESSURE DETECTION
     # -------------------------------------------------
 
-    if pressure_bar < 0.5:
+    if pressure_bar is not None and pressure_bar < 0.5:
         pressure_problem = True
 
     # -------------------------------------------------
@@ -129,7 +129,7 @@ def analyze_sensor_data(
     # With one flow sensor, theft cannot be mathematically
     # proven. We identify suspicious consumption instead.
 
-    if flow_rate > 20.0 and pressure_bar >= 0.5:
+    if pressure_bar is not None and flow_rate > 20.0 and pressure_bar >= 0.5:
 
         theft_suspicion = True
         theft_level = "POSSIBLE_THEFT"
