@@ -218,6 +218,7 @@ void readSensors() {
 String readingJson() {
   String json = "{";
   json += "\"device_id\":\"" + String(DEVICE_ID) + "\"";
+  json += ",\"source\":\"ESP32\"";
   json += ",\"zone_id\":\"" + String(ZONE_ID) + "\"";
   if (PIN_FLOW >= 0)      json += ",\"flow_rate\":" + String(flowRate, 2);
   if (PIN_PRESSURE >= 0)  json += ",\"pressure_bar\":" + String(pressureBar, 2);
