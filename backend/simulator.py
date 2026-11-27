@@ -177,9 +177,9 @@ def send_sensor_data(zone, data, label):
             f"{datetime.now().strftime('%H:%M:%S')}  "
             f"{zone['zone_id']} {zone['name_en']:<16} "
             f"{label:<10} "
-            f"flow {data['flow_rate']:>5} L/min  "
-            f"pressure {data['pressure_bar']:>4} bar  "
-            f"pH {data['ph']:>5}  "
+            f"flow {data.get('flow_rate', '--')}} L/min  "
+            f"pressure {data.get('pressure_bar', '--')}} bar  "
+            f"pH {data.get('ph', '--')}}  "
             f"-> {result}"
         )
 
