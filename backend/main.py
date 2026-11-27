@@ -258,6 +258,7 @@ def update_valve_control(
     control: ValveControlRequest,
     current_user=Depends(get_current_user),
 ):
+    raise HTTPException(status_code=409, detail="Valve control is unavailable: this ESP32 installation has sensors only and no valve actuator.")
     """
     Change the simulated smart valve state.
 
@@ -300,6 +301,7 @@ def update_motor_control(
     control: MotorControlRequest,
     current_user=Depends(get_current_user),
 ):
+    raise HTTPException(status_code=409, detail="Motor control is unavailable: this ESP32 installation has sensors only and no motor relay.")
     """
     Change the simulated motor state.
 
@@ -342,6 +344,7 @@ def update_auto_mode(
     control: AutoModeControlRequest,
     current_user=Depends(get_current_user),
 ):
+    raise HTTPException(status_code=409, detail="Automatic control is unavailable in sensor-only mode.")
     """
     Enable or disable automatic control mode.
     """
@@ -381,6 +384,7 @@ def update_auto_mode(
 def activate_emergency_shutdown(
     current_user=Depends(get_current_user),
 ):
+    raise HTTPException(status_code=409, detail="Emergency shutdown cannot operate without physical motor/valve actuators.")
     """
     Activate emergency shutdown.
 
@@ -424,6 +428,7 @@ def activate_emergency_shutdown(
 def clear_emergency_shutdown(
     current_user=Depends(get_current_user),
 ):
+    raise HTTPException(status_code=409, detail="Emergency shutdown controls are unavailable in sensor-only mode.")
     """
     Clear emergency shutdown.
 
