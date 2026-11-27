@@ -710,152 +710,139 @@ def get_system_status():
 
 @app.post("/api/sensor-data")
 def receive_sensor_data(data: SensorData):
+    current_timestamp = datetime.now(timezone.utc)
+    payload = data.model_dump(exclude_none=True)
+    source = data.source
 
-    # -----------------------------------------------------
-    # 1. RUN DETECTION ENGINE
-    # -----------------------------------------------------
+    # The simulator sends pressure-only supplemental telemetry for ZONE-01.
+    # It is stored separately and can never overwrite ESP32 measurements.
+    if source == "SIMULATOR" and data.zone_id == "ZONE-01" and data.pressure_bar is not None and data.flow_rate is None:
+        record = {
+            **payload,
+            "timestamp": current_timestamp,
+            "record_type": "SUPPLEMENTAL",
+            "field_sources": {"pressure_bar": "SIMULATOR"},
+        }
+        result = sensor_readings_collection.insert_one(record)
+        return {
+            "success": True,
+            "message": "Supplemental simulated pressure stored",
+            "record_id": str(result.inserted_id),
+            "source": source,
+            "record_type": "SUPPLEMENTAL",
+        }
+
+    required = (
+        ["flow_rate", "ph", "turbidity", "tds", "total_litres"]
+        if source == "ESP32"
+        else ["flow_rate", "pressure_bar", "ph", "turbidity", "tds", "total_litres"]
+    )
+    missing = [field for field in required if payload.get(field) is None]
+    if missing:
+        raise HTTPException(status_code=422, detail=f"{source} payload is missing required fields: {', '.join(missing)}")
+
+    field_sources = {field: source for field in required}
+    analysis_pressure = data.pressure_bar
+    if source == "ESP32":
+        pressure_record = sensor_readings_collection.find_one(
+            {"source": "SIMULATOR", "zone_id": data.zone_id, "record_type": "SUPPLEMENTAL", "pressure_bar": {"$exists": True}},
+            sort=[("timestamp", -1)],
+        )
+        if pressure_record:
+            analysis_pressure = pressure_record.get("pressure_bar")
+            field_sources["pressure_bar"] = "SIMULATOR"
+        else:
+            field_sources["pressure_bar"] = "UNAVAILABLE"
 
     detection_result = analyze_sensor_data(
         flow_rate=data.flow_rate,
-        pressure_bar=data.pressure_bar,
+        pressure_bar=analysis_pressure,
         ph=data.ph,
         turbidity=data.turbidity,
         tds=data.tds,
-        total_litres=data.total_litres
+        total_litres=data.total_litres,
     )
 
-    # -----------------------------------------------------
-    # 2. RUN AI ANOMALY DETECTION
-    # -----------------------------------------------------
-    #
-    # The trained Isolation Forest learns normal sensor
-    # behaviour and identifies unusual combinations of
-    # flow, pressure, pH, turbidity, TDS and usage patterns.
-    #
-    # Rule-based detection above is preserved unchanged.
-    # AI detection is an additional intelligent layer.
-    # -----------------------------------------------------
-
-    current_timestamp = datetime.now(timezone.utc)
-
-    ai_result = predict_sensor_data(
-        {
+    ai_result = (
+        predict_sensor_data({
             "flow_rate": data.flow_rate,
-            "pressure_bar": data.pressure_bar,
+            "pressure_bar": analysis_pressure,
             "ph": data.ph,
             "turbidity": data.turbidity,
             "tds": data.tds,
             "total_litres": data.total_litres,
             "hour_of_day": current_timestamp.hour,
-            "day_of_week": current_timestamp.weekday()
+            "day_of_week": current_timestamp.weekday(),
+        })
+        if analysis_pressure is not None
+        else {
+            "available": False,
+            "risk": "UNKNOWN",
+            "possible_cause": "Pressure telemetry has not arrived from the simulator yet",
         }
     )
-
-    # -----------------------------------------------------
-    # 3. CREATE ALERTS
-    # -----------------------------------------------------
 
     alerts = create_alerts(
         device_id=data.device_id,
         zone_id=data.zone_id,
-        detection_result=detection_result
+        detection_result=detection_result,
     )
-
-    # -----------------------------------------------------
-    # 4. PREPARE SENSOR RECORD
-    # -----------------------------------------------------
-
-    sensor_record = data.model_dump()
-
-    sensor_record["timestamp"] = datetime.now(
-        timezone.utc
-    )
-    sensor_record["source"] = "ESP32"
-
-    # Store detection results together with sensor data
-    sensor_record["detection"] = detection_result
-
-    # Store AI result separately so the frontend can
-    # distinguish AI analysis from rule-based detection.
-    sensor_record["ai_detection"] = ai_result
-
-    # -----------------------------------------------------
-    # 5. SAVE SENSOR READING TO MONGODB
-    # -----------------------------------------------------
-
-    result = sensor_readings_collection.insert_one(
-        sensor_record
-    )
-
-    # -----------------------------------------------------
-    # 6. STORE ALERTS IN MONGODB
-    # -----------------------------------------------------
-
     for alert in alerts:
-        alert["source"] = "ESP32"
-        alerts_collection.insert_one(alert)
+        alert["source"] = source
+        alert["field_sources"] = field_sources
 
-    # -----------------------------------------------------
-    # 7. BROADCAST REAL-TIME WEBSOCKET UPDATE
-    # -----------------------------------------------------
+    sensor_record = {
+        **payload,
+        "timestamp": current_timestamp,
+        "source": source,
+        "field_sources": field_sources,
+        "detection": detection_result,
+        "ai_detection": ai_result,
+    }
+    if source == "ESP32":
+        sensor_record["pressure_bar"] = analysis_pressure
+
+    result = sensor_readings_collection.insert_one(sensor_record)
+    for alert in alerts:
+        alerts_collection.insert_one(alert)
 
     await_manager_payload = {
         "event": "sensor_update",
         "record_id": str(result.inserted_id),
         "device_id": data.device_id,
         "zone_id": data.zone_id,
-        "timestamp": sensor_record["timestamp"],
+        "timestamp": current_timestamp,
+        "source": source,
+        "field_sources": field_sources,
         "sensor_data": {
             "flow_rate": data.flow_rate,
-            "pressure_bar": data.pressure_bar,
+            "pressure_bar": analysis_pressure,
             "ph": data.ph,
             "turbidity": data.turbidity,
             "tds": data.tds,
-            "total_litres": data.total_litres
+            "total_litres": data.total_litres,
         },
         "detection": detection_result,
         "ai_detection": ai_result,
         "alerts_created": len(alerts),
-        # Alert details for instant website notifications.
-        # MongoDB's _id is left out because it is not JSON-safe.
-        "alerts": [
-            {
-                key: value
-                for key, value in alert.items()
-                if key != "_id"
-            }
-            for alert in alerts
-        ]
+        "alerts": [{key: value for key, value in alert.items() if key != "_id"} for alert in alerts],
     }
-
-    # The HTTP endpoint remains synchronous, so FastAPI runs it
-    # in a worker thread where there is no running event loop.
-    # anyio.from_thread.run hands the async broadcast back to
-    # the server's event loop and waits for it to finish.
     try:
-        anyio.from_thread.run(
-            manager.broadcast,
-            await_manager_payload
-        )
+        anyio.from_thread.run(manager.broadcast, await_manager_payload)
     except Exception as error:
         print("WebSocket broadcast failed:", error)
 
-    # -----------------------------------------------------
-    # 8. RETURN RESPONSE
-    # -----------------------------------------------------
-
     return {
         "success": True,
-        "message": (
-            "Sensor data received, analyzed and "
-            "stored successfully"
-        ),
+        "message": "Sensor data received, analyzed and stored successfully",
         "record_id": str(result.inserted_id),
         "device_id": data.device_id,
         "zone_id": data.zone_id,
+        "source": source,
+        "field_sources": field_sources,
         "detection": detection_result,
         "ai_detection": ai_result,
-        "alerts_created": len(alerts)
+        "alerts_created": len(alerts),
     }
 
 
@@ -901,7 +888,7 @@ def get_latest_sensor_data():
 
     # Find newest sensor reading
     latest_data = sensor_readings_collection.find_one(
-        {"source": "ESP32"},
+        {"source": {"$in": ["ESP32", "SIMULATOR"]}, "record_type": {"$ne": "SUPPLEMENTAL"}},
         sort=[("timestamp", -1)]
     )
 
@@ -947,7 +934,7 @@ def get_sensor_history(
     # Build MongoDB query
     # -----------------------------------------------------
 
-    query = {"source": "ESP32"}
+    query = {"source": {"$in": ["ESP32", "SIMULATOR"]}, "record_type": {"$ne": "SUPPLEMENTAL"}}
 
     if device_id:
         query["device_id"] = device_id
@@ -1080,7 +1067,7 @@ def get_devices():
     # -----------------------------------------------------
 
     pipeline = [
-        {"$match": {"source": "ESP32"}},
+        {"$match": {"source": {"$in": ["ESP32", "SIMULATOR"]}, "record_type": {"$ne": "SUPPLEMENTAL"}}},
         {
             "$sort": {
                 "timestamp": -1
@@ -1589,16 +1576,16 @@ def get_zones():
 
     zones = []
 
-    for zone in ZONES[:1]:  # One physical ESP32 device is configured.
+    for zone in ZONES:
 
         latest = sensor_readings_collection.find_one(
-            {"zone_id": zone["zone_id"], "source": "ESP32"},
+            {"zone_id": zone["zone_id"], "source": {"$in": ["ESP32", "SIMULATOR"]}, "record_type": {"$ne": "SUPPLEMENTAL"}},
             sort=[("timestamp", -1)]
         )
 
         recent_alerts = list(
             alerts_collection
-            .find({"zone_id": zone["zone_id"], "source": "ESP32"})
+            .find({"zone_id": zone["zone_id"], "source": {"$in": ["ESP32", "SIMULATOR"]}})
             .sort("timestamp", -1)
             .limit(5)
         )
